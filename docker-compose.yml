@@ -1,0 +1,28 @@
+version: "2"
+services:
+  day:
+    image: digit_go:1.0
+    command: go build day.go tm1637.go stop.go
+    devices:
+      - "/dev/gpiomem:/dev/gpiomem"
+    restart: always
+    entrypoint:
+      - ./day
+  clock:
+    image: digit_go:1.0
+    command: go build clock.go tm1637.go stop.go
+    devices:
+      - "/dev/gpiomem:/dev/gpiomem"
+    restart: always
+    entrypoint:
+      - ./clock
+  temperature:
+    image: digit_go:1.0
+    command: go build ds18b20.go tm1637.go stop.go
+    restart: always
+    devices:
+      - "/dev/gpiomem:/dev/gpiomem"
+    volumes:
+      - "/sys/bus/w1/devices/28-05170143ccff/w1_slave:/sys/bus/w1/devices/28-05170143ccff/w1_slave"
+    entrypoint:
+      - ./ds18b20
